@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Monitor, FileText, BarChart3, Shield, Info, BookOpen, Facebook, Linkedin, ArrowRight, Sparkles, Zap, Target } from 'lucide-react';
+import { Monitor, FileText, BarChart3, Shield, Info, BookOpen, Facebook, Linkedin, ArrowRight, Sparkles, Zap, Target, Menu, X } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import logoImg from '../../imports/logo.png';
 import bannerAboutImg from '../../imports/banner_about_us_image.jpg';
@@ -37,6 +37,8 @@ const itemVariants = {
 };
 
 export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDropdown, dropdownRef }: HomePageProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Quốc Việt | Digital Excellence";
@@ -44,7 +46,7 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-orange-100 selection:text-orange-900">
-      
+
       {/* Dynamic Navigation */}
       <motion.header
         initial={{ y: -100 }}
@@ -63,15 +65,15 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
               QUỐC VIỆT <span className="text-orange-500 underline decoration-2 underline-offset-4">DIGITIZATION</span>
             </span>
           </button>
-          
+
           <nav className="hidden lg:flex gap-10 text-sm font-bold items-center text-gray-600">
-            <SafetyDropdown 
+            <SafetyDropdown
               setCurrentPage={setCurrentPage}
               showSafetyDropdown={showSafetyDropdown}
               setShowSafetyDropdown={setShowSafetyDropdown}
               dropdownRef={dropdownRef}
             />
-            
+
             {['E-Forms', 'Mixing Control', 'Case Studies', 'About Us'].map((item) => (
               <button
                 key={item}
@@ -95,26 +97,77 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
               Get Started
             </motion.button>
           </nav>
+
+          <button 
+            className="lg:hidden p-2 text-gray-600 hover:text-orange-500"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-white border-t border-gray-100 px-4 py-6 flex flex-col gap-4 shadow-lg absolute w-full top-full left-0 z-50"
+          >
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => {
+                  setCurrentPage('safetyVideoAnalytics');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-left font-bold text-gray-800 hover:text-orange-500 py-2 border-b border-gray-50"
+              >
+                Safety AI Solutions
+              </button>
+              {['E-Forms', 'Mixing Control', 'Case Studies', 'About Us'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => {
+                    if (item === 'E-Forms') setCurrentPage('eForm');
+                    if (item === 'About Us') setCurrentPage('aboutUs');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left font-bold text-gray-800 hover:text-orange-500 py-2 border-b border-gray-50"
+                >
+                  {item}
+                </button>
+              ))}
+              <button
+                onClick={() => {
+                  setCurrentPage('demoForm');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold mt-2"
+              >
+                Get Started
+              </button>
+            </div>
+          </motion.div>
+        )}
       </motion.header>
 
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center pt-20 pb-32 px-4 overflow-hidden">
         <div className="absolute inset-0 -z-10 overflow-hidden">
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.2, 1],
               x: [0, 100, 0],
-              y: [0, 50, 0] 
+              y: [0, 50, 0]
             }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             className="absolute -top-24 -left-24 w-[500px] h-[500px] bg-orange-100/50 rounded-full blur-[120px]"
           />
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.3, 1],
               x: [0, -150, 0],
-              y: [0, -100, 0] 
+              y: [0, -100, 0]
             }}
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
             className="absolute -bottom-48 -right-48 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-[150px]"
@@ -123,7 +176,7 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
 
         <div className="container mx-auto">
           <div className="max-w-5xl mx-auto text-center space-y-10">
-            
+
 
             <motion.h1
               initial={{ opacity: 0, y: 40 }}
@@ -159,8 +212,8 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
                 <span>Bắt đầu ngay</span>
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </motion.button>
-              
-              <button 
+
+              <button
                 onClick={() => setCurrentPage('safetyVideoAnalytics')}
                 className="text-gray-900 font-bold hover:text-orange-500 transition-colors flex items-center gap-2 px-6 py-3"
               >
@@ -171,110 +224,110 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
         </div>
       </section>
 
-    
-     {/* Vision & Mission Section */}
-<section className="py-32 px-4 overflow-hidden">
-  <div className="container mx-auto">
-    <div className="grid lg:grid-cols-2 gap-20 items-center">
-      
-      {/* Image */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
-        className="relative"
-      >
-        <div className="absolute -top-10 -left-10 w-32 h-32 bg-orange-100 rounded-full -z-10 animate-pulse" />
-        
-        <div className="rounded-[3rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] transform -rotate-2 hover:rotate-0 transition-transform duration-700">
-          <ImageWithFallback
-            src={bannerAboutImg}
-            alt="About Quốc Việt"
-            className="w-full aspect-[4/5] object-cover scale-110 hover:scale-100 transition-transform duration-1000"
-          />
-        </div>
-      </motion.div>
 
-      {/* Content */}
-      <div className="space-y-12">
-        <motion.div {...fUp}>
-          <h2 className="text-orange-500 font-black text-xs uppercase tracking-[0.3em] mb-4">
-            Our DNA
-          </h2>
+      {/* Vision & Mission Section */}
+      <section className="py-32 px-4 overflow-hidden">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
 
-          <h3 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-none mb-8">
-            Kiến tạo tương lai số cùng doanh nghiệp Việt.
-          </h3>
+            {/* Image */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="relative"
+            >
+              <div className="absolute -top-10 -left-10 w-32 h-32 bg-orange-100 rounded-full -z-10 animate-pulse" />
 
-          <p className="text-gray-500 text-lg leading-relaxed mb-10">
-            Tại <span className="font-semibold text-gray-900">QUỐC VIỆT</span>, 
-            chúng tôi tin rằng công nghệ chính là chìa khóa để mở ra những tiềm năng vô hạn cho doanh nghiệp. 
-            Sứ mệnh của chúng tôi không chỉ dừng ở việc cung cấp giải pháp, mà là đồng hành cùng các tổ chức 
-            trên hành trình chuyển đổi số toàn diện — giúp tái định hình cách vận hành, thúc đẩy sáng tạo 
-            và kiến tạo giá trị bền vững.
-          </p>
+              <div className="rounded-[3rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] transform -rotate-2 hover:rotate-0 transition-transform duration-700">
+                <ImageWithFallback
+                  src={bannerAboutImg}
+                  alt="About Quốc Việt"
+                  className="w-full aspect-[4/5] object-cover scale-110 hover:scale-100 transition-transform duration-1000"
+                />
+              </div>
+            </motion.div>
 
-          <div className="space-y-8">
-            {[
-              {
-                t: "Tầm nhìn chiến lược",
-                d: "Xây dựng một hệ sinh thái số mạnh mẽ, nơi dữ liệu được khai thác thông minh, quy trình được tối ưu tự động và nguồn lực được phát huy tối đa, giúp doanh nghiệp Việt bứt phá trong kỷ nguyên 4.0.",
-              },
-              {
-                t: "Sứ mệnh đồng hành",
-                d: "Đồng hành cùng doanh nghiệp trên hành trình chuyển đổi số toàn diện, cung cấp các giải pháp công nghệ linh hoạt, an toàn và bền vững nhằm tái định hình vận hành, thúc đẩy sáng tạo và kiến tạo giá trị lâu dài.",
-              },
-              {
-                t: "Cam kết phát triển",
-                d: "Với tinh thần đổi mới, tốc độ và trách nhiệm, QUỐC VIỆT cam kết trở thành đối tác tin cậy giúp khách hàng tiến nhanh hơn, vươn xa hơn và chinh phục những đỉnh cao mới.",
-              },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 * i }}
-                className="flex gap-6 group"
-              >
-                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
-                  <ArrowRight className="w-6 h-6" />
-                </div>
+            {/* Content */}
+            <div className="space-y-12">
+              <motion.div {...fUp}>
+                <h2 className="text-orange-500 font-black text-xs uppercase tracking-[0.3em] mb-4">
+                  Our DNA
+                </h2>
 
-                <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">
-                    {item.t}
-                  </h4>
-                  <p className="text-gray-500 leading-relaxed">
-                    {item.d}
-                  </p>
+                <h3 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-none mb-8">
+                  Kiến tạo tương lai số cùng doanh nghiệp Việt.
+                </h3>
+
+                <p className="text-gray-500 text-lg leading-relaxed mb-10">
+                  Tại <span className="font-semibold text-gray-900">QUỐC VIỆT</span>,
+                  chúng tôi tin rằng công nghệ chính là chìa khóa để mở ra những tiềm năng vô hạn cho doanh nghiệp.
+                  Sứ mệnh của chúng tôi không chỉ dừng ở việc cung cấp giải pháp, mà là đồng hành cùng các tổ chức
+                  trên hành trình chuyển đổi số toàn diện — giúp tái định hình cách vận hành, thúc đẩy sáng tạo
+                  và kiến tạo giá trị bền vững.
+                </p>
+
+                <div className="space-y-8">
+                  {[
+                    {
+                      t: "Tầm nhìn chiến lược",
+                      d: "Xây dựng một hệ sinh thái số mạnh mẽ, nơi dữ liệu được khai thác thông minh, quy trình được tối ưu tự động và nguồn lực được phát huy tối đa, giúp doanh nghiệp Việt bứt phá trong kỷ nguyên 4.0.",
+                    },
+                    {
+                      t: "Sứ mệnh đồng hành",
+                      d: "Đồng hành cùng doanh nghiệp trên hành trình chuyển đổi số toàn diện, cung cấp các giải pháp công nghệ linh hoạt, an toàn và bền vững nhằm tái định hình vận hành, thúc đẩy sáng tạo và kiến tạo giá trị lâu dài.",
+                    },
+                    {
+                      t: "Cam kết phát triển",
+                      d: "Với tinh thần đổi mới, tốc độ và trách nhiệm, QUỐC VIỆT cam kết trở thành đối tác tin cậy giúp khách hàng tiến nhanh hơn, vươn xa hơn và chinh phục những đỉnh cao mới.",
+                    },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.2 * i }}
+                      className="flex gap-6 group"
+                    >
+                      <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                        <ArrowRight className="w-6 h-6" />
+                      </div>
+
+                      <div>
+                        <h4 className="text-xl font-bold text-gray-900 mb-2">
+                          {item.t}
+                        </h4>
+                        <p className="text-gray-500 leading-relaxed">
+                          {item.d}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </motion.div>
-            ))}
-          </div>
-        </motion.div>
 
-        {/* Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => setCurrentPage("aboutUs")}
-          className="bg-gray-100 text-gray-900 px-8 py-4 rounded-full font-bold hover:bg-orange-50 hover:text-orange-600 transition-all flex items-center gap-3"
-        >
-          Tìm hiểu thêm
-          <ArrowRight className="w-5 h-5" />
-        </motion.button>
-      </div>
-    </div>
-  </div>
-</section>
+              {/* Button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage("aboutUs")}
+                className="bg-gray-100 text-gray-900 px-8 py-4 rounded-full font-bold hover:bg-orange-50 hover:text-orange-600 transition-all flex items-center gap-3"
+              >
+                Tìm hiểu thêm
+                <ArrowRight className="w-5 h-5" />
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Solutions Grid */}
       <section className="py-32 px-4 bg-orange-50/50 rounded-[4rem] mx-4 relative overflow-hidden border border-orange-100">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-200/40 rounded-full blur-[120px] -z-10" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-100/40 rounded-full blur-[120px] -z-10" />
-        
+
         <div className="container mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

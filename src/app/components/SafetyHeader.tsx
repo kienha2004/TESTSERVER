@@ -13,22 +13,22 @@ interface SafetyHeaderProps {
   backPage?: any;
 }
 
-export function SafetyHeader({ 
-  setCurrentPage, 
-  showSafetyDropdown, 
-  setShowSafetyDropdown, 
+export function SafetyHeader({
+  setCurrentPage,
+  showSafetyDropdown,
+  setShowSafetyDropdown,
   dropdownRef,
   backPage = 'home'
 }: SafetyHeaderProps) {
   return (
-    <motion.header 
+    <motion.header
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       className="bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm sticky top-0 z-50 py-3"
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
-          
+
           <div className="flex items-center gap-6">
             <motion.button
               whileHover={{ x: -3 }}
@@ -51,11 +51,11 @@ export function SafetyHeader({
                 <span className="text-[9px] font-black uppercase tracking-[0.2em] text-orange-500">Digitization</span>
               </div>
             </button>
-            
+
             <div className="h-8 w-px bg-gray-100 mx-2 hidden md:block"></div>
-            
+
             <div className="hidden lg:block">
-              <SafetyDropdown 
+              <SafetyDropdown
                 setCurrentPage={setCurrentPage}
                 showSafetyDropdown={showSafetyDropdown}
                 setShowSafetyDropdown={setShowSafetyDropdown}
@@ -63,7 +63,7 @@ export function SafetyHeader({
               />
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -74,7 +74,7 @@ export function SafetyHeader({
               <Sparkles className="w-3.5 h-3.5" />
               Book Demo
             </motion.button>
-            
+
             <motion.button
               whileHover={{ rotate: 15 }}
               whileTap={{ scale: 0.9 }}
