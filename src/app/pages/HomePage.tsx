@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Monitor, FileText, BarChart3, Shield, Info, BookOpen, Facebook, Linkedin, ArrowRight, Sparkles, Zap, Target, Menu, X } from 'lucide-react';
+import { Monitor, FileText, BarChart3, Shield, Info, BookOpen, Facebook, Linkedin, ArrowRight, Sparkles, Zap, Target } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import logoImg from '../../imports/logo.png';
 import bannerAboutImg from '../../imports/banner_about_us_image.jpg';
@@ -37,8 +37,6 @@ const itemVariants = {
 };
 
 export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDropdown, dropdownRef }: HomePageProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Quốc Việt | Digital Excellence";
@@ -53,10 +51,10 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
         animate={{ y: 0 }}
         className="border-b border-gray-100 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50"
       >
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-0">
           <button
             onClick={() => setCurrentPage('home')}
-            className="flex items-center gap-3 hover:opacity-80 transition-all group"
+            className="flex items-center gap-3 hover:opacity-80 transition-all group self-start lg:self-auto"
           >
             <div className="p-1.5 bg-orange-50 rounded-xl group-hover:rotate-12 transition-transform">
               <ImageWithFallback src={logoImg} alt="Logo" className="h-8 w-auto" />
@@ -66,7 +64,7 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
             </span>
           </button>
 
-          <nav className="hidden lg:flex gap-10 text-sm font-bold items-center text-gray-600">
+          <nav className="flex gap-6 lg:gap-10 text-sm font-bold items-center text-gray-600 overflow-x-auto whitespace-nowrap max-w-full pb-2 lg:pb-0 w-full lg:w-auto scrollbar-hide" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
             <SafetyDropdown
               setCurrentPage={setCurrentPage}
               showSafetyDropdown={showSafetyDropdown}
@@ -81,7 +79,7 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
                   if (item === 'E-Forms') setCurrentPage('eForm');
                   if (item === 'About Us') setCurrentPage('aboutUs');
                 }}
-                className="hover:text-orange-500 transition-colors relative group uppercase tracking-widest text-[11px]"
+                className="hover:text-orange-500 transition-colors relative group uppercase tracking-widest text-[11px] shrink-0"
               >
                 {item}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"></span>
@@ -92,63 +90,12 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setCurrentPage('demoForm')}
-              className="bg-gray-900 text-white px-6 py-2.5 rounded-full text-[11px] uppercase tracking-widest font-black hover:bg-orange-500 transition-colors shadow-lg shadow-gray-200"
+              className="bg-gray-900 text-white px-6 py-2.5 rounded-full text-[11px] uppercase tracking-widest font-black hover:bg-orange-500 transition-colors shadow-lg shadow-gray-200 shrink-0 ml-2"
             >
               Get Started
             </motion.button>
           </nav>
-
-          <button 
-            className="lg:hidden p-2 text-gray-600 hover:text-orange-500"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
-
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-t border-gray-100 px-4 py-6 flex flex-col gap-4 shadow-lg absolute w-full top-full left-0 z-50"
-          >
-            <div className="flex flex-col gap-4">
-              <button
-                onClick={() => {
-                  setCurrentPage('safetyVideoAnalytics');
-                  setIsMobileMenuOpen(false);
-                }}
-                className="text-left font-bold text-gray-800 hover:text-orange-500 py-2 border-b border-gray-50"
-              >
-                Safety AI Solutions
-              </button>
-              {['E-Forms', 'Mixing Control', 'Case Studies', 'About Us'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => {
-                    if (item === 'E-Forms') setCurrentPage('eForm');
-                    if (item === 'About Us') setCurrentPage('aboutUs');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="text-left font-bold text-gray-800 hover:text-orange-500 py-2 border-b border-gray-50"
-                >
-                  {item}
-                </button>
-              ))}
-              <button
-                onClick={() => {
-                  setCurrentPage('demoForm');
-                  setIsMobileMenuOpen(false);
-                }}
-                className="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold mt-2"
-              >
-                Get Started
-              </button>
-            </div>
-          </motion.div>
-        )}
       </motion.header>
 
       {/* Hero Section */}
