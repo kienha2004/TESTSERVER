@@ -9,6 +9,38 @@ interface SafetyDropdownProps {
 }
 
 export function SafetyDropdown({ setCurrentPage, showSafetyDropdown, setShowSafetyDropdown, dropdownRef }: SafetyDropdownProps) {
+  const buttonRef = React.useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = React.useState({ top: 0, left: 0 });
+
+  React.useEffect(() => {
+    if (showSafetyDropdown && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setCoords({
+        top: rect.bottom,
+        left: rect.left
+      });
+    }
+  }, [showSafetyDropdown]);
+
+  // Handle scroll and resize to close or reposition
+  React.useEffect(() => {
+    const handleUpdate = () => {
+      if (showSafetyDropdown && buttonRef.current) {
+        const rect = buttonRef.current.getBoundingClientRect();
+        setCoords({
+          top: rect.bottom,
+          left: rect.left
+        });
+      }
+    };
+
+    window.addEventListener('scroll', handleUpdate);
+    window.addEventListener('resize', handleUpdate);
+    return () => {
+      window.removeEventListener('scroll', handleUpdate);
+      window.removeEventListener('resize', handleUpdate);
+    };
+  }, [showSafetyDropdown]);
   const items = [
     { label: 'PPE Detection', icon: '🦺', page: 'ppeDetection' },
     { label: 'Unguarded Edge Detection', icon: '🚧', page: 'unguardedEdgeDetection' },
@@ -27,7 +59,7 @@ export function SafetyDropdown({ setCurrentPage, showSafetyDropdown, setShowSafe
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <div className="flex items-center">
+      <div className="flex items-center" ref={buttonRef}>
         <button
           onClick={() => setCurrentPage('safetyVideoAnalytics')}
           className="hover:text-orange-500 transition-colors duration-300 font-medium"
@@ -43,7 +75,13 @@ export function SafetyDropdown({ setCurrentPage, showSafetyDropdown, setShowSafe
       </div>
 
       {showSafetyDropdown && (
-        <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl w-72 py-2 z-50 max-h-[450px] overflow-y-auto">
+        <div 
+          className="fixed mt-2 bg-white border border-gray-200 rounded-lg shadow-xl w-72 py-2 z-[9999] max-h-[450px] overflow-y-auto"
+          style={{
+            top: `${coords.top}px`,
+            left: `${Math.max(10, Math.min(coords.left, window.innerWidth - 300))}px`
+          }}
+        >
           {items.map((item, index) => (
             <button
               key={index}
