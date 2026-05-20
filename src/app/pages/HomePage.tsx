@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { Monitor, FileText, BarChart3, Shield, Info, BookOpen, Facebook, Linkedin, ArrowRight, Sparkles, Zap, Target } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Monitor, FileText, BarChart3, Shield, Info, BookOpen, Facebook, Linkedin, ArrowRight, Sparkles, Zap, Target, Menu, X, ChevronDown } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import logoImg from '../../imports/logo.png';
 import bannerAboutImg from '../../imports/banner_about_us_image.jpg';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { SafetyDropdown } from '../components/SafetyDropdown';
 import { PageFooter } from '../components/PageFooter';
 
@@ -37,6 +37,25 @@ const itemVariants = {
 };
 
 export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDropdown, dropdownRef }: HomePageProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSafetyOpen, setIsMobileSafetyOpen] = useState(false);
+
+  const safetyItems = [
+    { label: 'PPE Detection', icon: '🦺', page: 'ppeDetection' },
+    { label: 'Unguarded Edge Detection', icon: '🚧', page: 'unguardedEdgeDetection' },
+    { label: 'Missing Barricade Detection', icon: '🚨', page: 'missingBarricadeDetection' },
+    { label: 'Fall Detection', icon: '🤕', page: 'fallDetection' },
+    { label: 'Proximity Detection & Warning', icon: '⚠️', page: 'proximityDetection' },
+    { label: 'Work Under Suspended Load Monitoring', icon: '🏗️', page: 'suspendedLoadMonitoring' },
+    { label: 'Unauthorized Intrusion Detection', icon: '🏢', page: 'intrusionDetection' },
+    { label: 'Workforce Heat Maps', icon: '🗺️', page: 'heatMap' },
+    { label: 'Perimeter Intrusion Detection', icon: '🛡️', page: 'peripheralIntrusion' },
+    { label: 'Weapon Detection', icon: '🔫', page: 'weaponDetection' },
+    { label: 'Theft Detection', icon: '🔒', page: 'theftDetection' },
+    { label: 'Loitering Detection', icon: '🚶', page: 'loiteringDetection' },
+    { label: 'Fighting & Violence Detection', icon: '🤼', page: 'fightingDetection' },
+  ];
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Quốc Việt | Digital Excellence";
@@ -51,10 +70,10 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
         animate={{ y: 0 }}
         className="border-b border-gray-100 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50"
       >
-        <div className="container mx-auto px-4 py-4 flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-0">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => setCurrentPage('home')}
-            className="flex items-center gap-3 hover:opacity-80 transition-all group self-start lg:self-auto"
+            className="flex items-center gap-3 hover:opacity-80 transition-all group"
           >
             <div className="p-1.5 bg-orange-50 rounded-xl group-hover:rotate-12 transition-transform">
               <ImageWithFallback src={logoImg} alt="Logo" className="h-8 w-auto" />
@@ -64,7 +83,8 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
             </span>
           </button>
 
-          <nav className="flex gap-6 lg:gap-10 text-sm font-bold items-center text-gray-600 overflow-x-auto whitespace-nowrap max-w-full pb-2 lg:pb-0 w-full lg:w-auto scrollbar-hide" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex gap-6 lg:gap-10 text-sm font-bold items-center text-gray-600">
             <SafetyDropdown
               setCurrentPage={setCurrentPage}
               showSafetyDropdown={showSafetyDropdown}
@@ -95,7 +115,106 @@ export function HomePage({ setCurrentPage, showSafetyDropdown, setShowSafetyDrop
               Get Started
             </motion.button>
           </nav>
+
+          {/* Hamburger Menu Icon */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl bg-gray-50 text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-all"
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden border-t border-gray-100 bg-white overflow-hidden"
+            >
+              <div className="px-6 py-6 flex flex-col gap-5 max-h-[80vh] overflow-y-auto">
+                {/* Safety Accordion */}
+                <div className="border-b border-gray-50 pb-4">
+                  <div className="flex items-center justify-between">
+                    <button
+                      onClick={() => {
+                        setCurrentPage('safetyVideoAnalytics');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="text-left font-black text-gray-900 text-xs uppercase tracking-widest hover:text-orange-500 transition-colors"
+                    >
+                      Safety Video Analytics
+                    </button>
+                    <button
+                      onClick={() => setIsMobileSafetyOpen(!isMobileSafetyOpen)}
+                      className="p-1 text-gray-500 hover:text-orange-500 transition-colors"
+                    >
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isMobileSafetyOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                  </div>
+
+                  <AnimatePresence>
+                    {isMobileSafetyOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="mt-3 pl-4 flex flex-col gap-3 border-l border-orange-200 overflow-hidden"
+                      >
+                        {safetyItems.map((item, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              setCurrentPage(item.page);
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="flex items-center gap-3 py-1.5 text-left text-xs font-semibold text-gray-600 hover:text-orange-500 transition-colors"
+                          >
+                            <span>{item.icon}</span>
+                            <span>{item.label}</span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Other menu items */}
+                {['E-Forms', 'Mixing Control', 'Case Studies', 'About Us'].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      if (item === 'E-Forms') setCurrentPage('eForm');
+                      if (item === 'About Us') setCurrentPage('aboutUs');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="text-left font-black text-gray-900 text-xs uppercase tracking-widest hover:text-orange-500 transition-colors border-b border-gray-50 pb-4"
+                  >
+                    {item}
+                  </button>
+                ))}
+
+                {/* Get Started Button */}
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setCurrentPage('demoForm');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="bg-gray-900 text-white w-full py-4 rounded-full text-center text-xs uppercase tracking-widest font-black hover:bg-orange-500 transition-colors shadow-lg shadow-gray-200"
+                >
+                  Get Started
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.header>
 
       {/* Hero Section */}
